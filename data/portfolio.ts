@@ -1,0 +1,88 @@
+import type { PortfolioWedding } from "./types";
+
+export const portfolio: PortfolioWedding[] = [
+  {
+    slug: "val-dorcia",
+    couple: "Amelia & James",
+    location: "Val d'Orcia, Tuscany",
+    cover: "/images/galleries/val-dorcia/cover.jpg",
+    images: [
+      "/images/galleries/val-dorcia/01.jpg",
+      "/images/galleries/val-dorcia/02.jpg",
+      "/images/galleries/val-dorcia/03.jpg",
+      "/images/galleries/val-dorcia/04.jpg",
+      "/images/galleries/val-dorcia/05.jpg",
+      "/images/galleries/val-dorcia/06.jpg",
+    ],
+  },
+  {
+    slug: "marigolds-monsoon",
+    couple: "Priya & Arjun",
+    location: "Udaipur, Rajasthan",
+    cover: "/images/galleries/marigolds-monsoon/cover.jpg",
+    images: [
+      "/images/galleries/marigolds-monsoon/01.jpg",
+      "/images/galleries/marigolds-monsoon/02.jpg",
+      "/images/galleries/marigolds-monsoon/03.jpg",
+      "/images/galleries/marigolds-monsoon/04.jpg",
+      "/images/galleries/marigolds-monsoon/05.jpg",
+      "/images/galleries/marigolds-monsoon/06.jpg",
+    ],
+  },
+  {
+    slug: "villa-balbiano",
+    couple: "Elena & Marco",
+    location: "Lake Como, Lombardy",
+    cover: "/images/galleries/villa-balbiano/cover.jpg",
+    images: [
+      "/images/galleries/villa-balbiano/01.jpg",
+      "/images/galleries/villa-balbiano/02.jpg",
+      "/images/galleries/villa-balbiano/03.jpg",
+      "/images/galleries/villa-balbiano/04.jpg",
+      "/images/galleries/villa-balbiano/05.jpg",
+      "/images/galleries/villa-balbiano/06.jpg",
+    ],
+  },
+  {
+    slug: "aegean-linen",
+    couple: "Sofia & Daniel",
+    location: "Oia, Santorini",
+    cover: "/images/galleries/aegean-linen/cover.jpg",
+    images: [
+      "/images/galleries/aegean-linen/01.jpg",
+      "/images/galleries/aegean-linen/02.jpg",
+      "/images/galleries/aegean-linen/03.jpg",
+      "/images/galleries/aegean-linen/04.jpg",
+      "/images/galleries/aegean-linen/05.jpg",
+      "/images/galleries/aegean-linen/06.jpg",
+    ],
+  },
+  {
+    slug: "rose-dust-palms",
+    couple: "Noor & Idris",
+    location: "Marrakech, Morocco",
+    cover: "/images/galleries/rose-dust-palms/cover.jpg",
+    images: [
+      "/images/galleries/rose-dust-palms/01.jpg",
+      "/images/galleries/rose-dust-palms/02.jpg",
+      "/images/galleries/rose-dust-palms/03.jpg",
+      "/images/galleries/rose-dust-palms/04.jpg",
+      "/images/galleries/rose-dust-palms/05.jpg",
+      "/images/galleries/rose-dust-palms/06.jpg",
+    ],
+  },
+  {
+    slug: "wildflower-notes",
+    couple: "Hannah & Theo",
+    location: "Cotswolds, Gloucestershire",
+    cover: "/images/galleries/wildflower-notes/cover.jpg",
+    images: [
+      "/images/galleries/wildflower-notes/01.jpg",
+      "/images/galleries/wildflower-notes/02.jpg",
+      "/images/galleries/wildflower-notes/03.jpg",
+      "/images/galleries/wildflower-notes/04.jpg",
+      "/images/galleries/wildflower-notes/05.jpg",
+      "/images/galleries/wildflower-notes/06.jpg",
+    ],
+  },
+];

@@ -10,6 +10,7 @@ import {
   getService,
   services,
 } from "@/data/services";
+import { pageMetadata } from "@/lib/seo";
 
 // Every slug is prerendered; allow the route to resolve params before rendering.
 export const instant = false;
@@ -34,15 +35,18 @@ export async function generateMetadata({
     return { title: "Service not found" };
   }
 
-  return {
+  return pageMetadata({
     title: service.name,
     description: service.description,
-    openGraph: {
-      title: `${service.name} — ${service.tagline}`,
-      description: service.description,
-      images: [{ url: service.cover }],
-    },
-  };
+    path: `/services/${service.slug}`,
+    image: service.cover,
+    imageAlt: `${service.name} by Anisha Tely`,
+    keywords: [
+      service.name.toLowerCase(),
+      `${service.name.toLowerCase()} pricing`,
+      "wedding photographer",
+    ],
+  });
 }
 
 export default async function ServicePage({ params }: ServicePageProps) {

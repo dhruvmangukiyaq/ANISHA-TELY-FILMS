@@ -5,12 +5,17 @@ import SectionLabel from "@/components/SectionLabel";
 import VideoGallery, { type VideoCard } from "@/components/VideoGallery";
 import { galleries } from "@/data/galleries";
 import { videos } from "@/data/videos";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Videos",
   description:
     "Short wedding films built around the sound of the day — the vows, the laughter, and the band at midnight.",
-};
+  path: "/videos",
+  image: "/images/galleries/saltwater-vows/cover.jpg",
+  imageAlt: "Wedding films by Anisha Tely",
+  keywords: ["wedding films", "wedding videographer", "wedding highlight film"],
+});
 
 const films: VideoCard[] = videos.map((video) => ({
   ...video,

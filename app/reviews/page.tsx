@@ -5,12 +5,21 @@ import Reveal from "@/components/Reveal";
 import SectionLabel from "@/components/SectionLabel";
 import Stars from "@/components/Stars";
 import { reviewAverage, reviews } from "@/data/reviews";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Reviews",
   description:
     "Kind words from couples photographed by Anisha Tely — in Tuscany, Udaipur, Lake Como, and the Cotswolds.",
-};
+  path: "/reviews",
+  image: "/images/galleries/rain-on-cedar/cover.jpg",
+  imageAlt: "Couple reviews of Anisha Tely Films",
+  keywords: [
+    "wedding photographer reviews",
+    "Anisha Tely reviews",
+    "wedding photography testimonials",
+  ],
+});
 
 const countries = new Set(reviews.map((review) => review.country)).size;
 const pad = (value: number) => String(value).padStart(2, "0");

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import CTA from "@/components/CTA";
 import HeroSlideshow from "@/components/HeroSlideshow";
 import PortfolioCard from "@/components/PortfolioCard";
@@ -11,9 +12,16 @@ import { gallery } from "@/data/gallery";
 import { portfolio } from "@/data/portfolio";
 import { reviewTestimonials } from "@/data/reviews";
 import { services } from "@/data/services";
+import { site } from "@/data/site";
 
 const recentWeddings = portfolio.slice(0, 3);
 const galleryPreview = gallery.slice(0, 12);
+
+export const metadata: Metadata = {
+  title: { absolute: "Anisha Tely Films — Wedding Photography & Film" },
+  description: site.description,
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   return (

@@ -11,6 +11,7 @@ import {
   getAdjacentGalleries,
   getGallery,
 } from "@/data/galleries";
+import { pageMetadata } from "@/lib/seo";
 
 // Every slug is prerendered; allow the route to resolve params before rendering.
 export const instant = false;
@@ -33,15 +34,18 @@ export async function generateMetadata({
     return { title: "Story not found" };
   }
 
-  return {
+  return pageMetadata({
     title: `${gallery.couple} — ${gallery.location}`,
     description: gallery.excerpt,
-    openGraph: {
-      title: `${gallery.couple} — ${gallery.location}`,
-      description: gallery.excerpt,
-      images: [{ url: gallery.cover, alt: `${gallery.couple} wedding` }],
-    },
-  };
+    path: `/portfolio/${gallery.slug}`,
+    image: gallery.cover,
+    imageAlt: `${gallery.couple} wedding in ${gallery.location}`,
+    keywords: [
+      `${gallery.location} wedding photographer`,
+      `${gallery.couple} wedding`,
+      "destination wedding photography",
+    ],
+  });
 }
 
 export default async function GalleryPage({ params }: GalleryPageProps) {

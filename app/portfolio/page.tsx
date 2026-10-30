@@ -4,12 +4,21 @@ import PageHero from "@/components/PageHero";
 import PortfolioCard from "@/components/PortfolioCard";
 import Reveal from "@/components/Reveal";
 import { portfolio } from "@/data/portfolio";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Portfolio",
   description:
     "Six wedding stories from Italy, India, Greece, Morocco and England — photographed by Anisha Tely.",
-};
+  path: "/portfolio",
+  image: "/images/galleries/aegean-linen/cover.jpg",
+  imageAlt: "Wedding portfolio — a ceremony in Greece",
+  keywords: [
+    "wedding portfolio",
+    "destination wedding photographer",
+    "editorial wedding photos",
+  ],
+});
 
 export default function PortfolioPage() {
   return (

@@ -1,6 +1,6 @@
 # Anisha Tely Films
 
-A dark, editorial portfolio site for a wedding photographer and filmmaker. Built with the Next.js App Router, TypeScript, and Tailwind CSS v4. Every piece of content is local mock data — there is no backend, database, or CMS.
+A dark, editorial portfolio site for a wedding photographer and filmmaker. Built with the Next.js App Router, TypeScript, Tailwind CSS v4, and Framer Motion. Every piece of content is local mock data — there is no backend, database, or CMS.
 
 ## Getting started
 
@@ -23,14 +23,16 @@ Open [http://localhost:3000](http://localhost:3000).
 | Route | Description |
 | --- | --- |
 | `/` | Hero, manifesto, featured stories, approach, testimonials, press, CTA |
-| `/about` | Biography, approach, collections, FAQ accordion |
+| `/about` | Biography, approach, press, and studio statistics |
 | `/services` | Photography, film, and destination services |
+| `/services/[slug]` | Collection detail, process, and next/previous navigation |
+| `/faq` | Accordion of the questions couples ask most |
 | `/portfolio` | Grid of wedding stories |
 | `/portfolio/[slug]` | Cover, story, masonry gallery with lightbox, and next/previous navigation |
 | `/gallery` | Masonry photo wall with category filters and a fullscreen lightbox |
 | `/videos` | Wedding film cards |
 | `/reviews` | Couple reviews |
-| `/contact` | Enquiry form (local-only mock submission) |
+| `/contact` | Enquiry form with validation, WhatsApp, and a map placeholder |
 | `not-found` | Custom 404 |
 
 Also included: `app/sitemap.ts`, `app/robots.ts`, and an SVG favicon at `app/icon.svg`.
@@ -38,17 +40,19 @@ Also included: `app/sitemap.ts`, `app/robots.ts`, and an SVG favicon at `app/ico
 ## Project structure
 
 ```
-app/                 Routes, layout, global styles, metadata
+app/                 Routes, layout, global styles, metadata, template
 components/          Header, footer, gallery cards, carousel, accordion,
-                     reveal animation, and the mock enquiry form
-data/                Mock content: galleries, collections, testimonials,
-                     FAQ, and site settings
+                     scroll animations (Framer Motion), and the mock enquiry form
+data/                Mock content: galleries, portfolio, reviews, videos,
+                     services, FAQ, and site settings
+lib/                 Shared utilities (e.g. SEO metadata builder)
 public/images/       Locally generated placeholder photography
 ```
 
 ### Editing content
 
-- **Brand, contact details, nav, stats, press** — `data/site.ts`
+- **Brand, contact details, nav, stats, press** — `data/site.ts` (also holds
+  the WhatsApp number and the pre-filled message used by the contact page)
 - **Galleries and categories** — `data/galleries.ts` (add a gallery and its
   `cover`/`photos` paths; the detail page is generated automatically)
 - **Collections, testimonials, FAQ** — `data/collections.ts`,
@@ -79,14 +83,18 @@ Theme tokens live in `app/globals.css` under `@theme`:
 | `gold` | `#c9a86a` | Accent |
 | `gold-light` | `#e7d3a8` | Highlighted accent |
 | `gold-deep` | `#8a6b3b` | Deep accent |
+| `danger` | `#e2a58f` | Form validation errors |
 
 Type is set with Cormorant Garamond (display) and Jost (sans) via `next/font`.
-Animations respect `prefers-reduced-motion`.
+Scroll reveals use Framer Motion (`Reveal`), with a subtle page fade (`app/template.tsx`), a reading progress bar (`ScrollProgress`), and full respect for `prefers-reduced-motion`. Per-page SEO metadata is built with `lib/seo.ts`; the root layout adds `viewport`, JSON-LD (`ProfessionalService`), and a noscript fallback for reveals. `next.config.ts` enables AVIF/WebP, caps device sizes, and sets a 30-day image cache TTL.
 
 ## Notes
 
-- The enquiry form is a client-side mock. It validates fields and shows a
-  success state, but sends nothing anywhere.
+- The enquiry form is a client-side mock. It validates every field, moves focus
+  to the first invalid input, and shows a success state, but sends nothing
+  anywhere.
+- The contact map is a styled placeholder, not an embedded map. `mapsHref` in
+  `data/site.ts` powers the "Open in Google Maps" link.
 - Built against Next.js 16 with Cache Components enabled. Avoid unguarded
   runtime values such as `new Date()` in server components, or prerendering
   will fail.

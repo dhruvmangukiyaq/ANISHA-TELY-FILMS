@@ -3,12 +3,21 @@ import CTA from "@/components/CTA";
 import GalleryExplorer from "@/components/GalleryExplorer";
 import PageHero from "@/components/PageHero";
 import { gallery } from "@/data/gallery";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Gallery",
   description:
     "A selection of frames from recent weddings — quiet portraits, long tables, and the light in between.",
-};
+  path: "/gallery",
+  image: "/images/galleries/rose-dust-palms/cover.jpg",
+  imageAlt: "Wedding gallery — portraits and details",
+  keywords: [
+    "wedding photo gallery",
+    "wedding portraits",
+    "wedding details photography",
+  ],
+});
 
 export default function GalleryPage() {
   return (

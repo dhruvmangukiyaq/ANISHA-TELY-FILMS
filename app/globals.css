@@ -19,6 +19,8 @@
   --color-gold-light: #e7d3a8;
   --color-gold-deep: #8a6b3b;
 
+  --color-danger: #e2a58f;
+
   --tracking-widest-2: 0.32em;
 
   --animate-marquee: marquee 38s linear infinite;
@@ -119,7 +121,10 @@
   margin-inline: auto;
   width: 100%;
   max-width: 90rem;
-  padding-inline: 1.5rem;
+  padding-inline: 1rem;
+  @media (min-width: 640px) {
+    padding-inline: 1.25rem;
+  }
   @media (min-width: 768px) {
     padding-inline: 2.5rem;
   }
@@ -145,10 +150,14 @@
 }
 
 @utility eyebrow {
-  font-size: 0.6875rem;
-  letter-spacing: 0.32em;
+  font-size: 0.625rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--color-gold);
+  @media (min-width: 640px) {
+    font-size: 0.6875rem;
+    letter-spacing: 0.32em;
+  }
 }
 
 @utility text-balance-pretty {
@@ -196,27 +205,6 @@
     transparent
   );
   height: 1px;
-}
-
-@utility reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition:
-    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: opacity, transform;
-}
-
-.reveal[data-visible="true"] {
-  opacity: 1;
-  transform: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1;
-    transform: none;
-  }
 }
 
 @utility image-wash {

@@ -9,12 +9,21 @@ import SectionLabel from "@/components/SectionLabel";
 import Stats from "@/components/Stats";
 import { approach } from "@/data/collections";
 import { site } from "@/data/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About",
   description:
     "Meet Anisha Tely — wedding photographer and filmmaker working between Mumbai and London. Quiet, editorial photography for intimate celebrations.",
-};
+  path: "/about",
+  image: "/images/about-portrait.jpg",
+  imageAlt: "Anisha Tely, wedding photographer and filmmaker",
+  keywords: [
+    "about Anisha Tely",
+    "wedding photographer Mumbai",
+    "editorial wedding photography",
+  ],
+});
 
 export default function AboutPage() {
   return (
@@ -50,7 +59,6 @@ export default function AboutPage() {
                   src="/images/about-portrait.jpg"
                   alt="Anisha Tely, wedding photographer and filmmaker"
                   fill
-                  priority
                   sizes="(min-width: 1024px) 40vw, 100vw"
                   className="object-cover"
                 />

@@ -6,12 +6,21 @@ import PageHero from "@/components/PageHero";
 import SectionLabel from "@/components/SectionLabel";
 import { faqs } from "@/data/faq";
 import { site } from "@/data/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "FAQ",
   description:
     "Answers to the questions couples ask most — travel, booking timelines, editing, deliverables, and how photography and film work together.",
-};
+  path: "/faq",
+  image: "/images/cta-wide.jpg",
+  imageAlt: "Frequently asked questions about wedding photography and film",
+  keywords: [
+    "wedding photographer FAQ",
+    "wedding photography booking",
+    "wedding film questions",
+  ],
+});
 
 const structuredData = {
   "@context": "https://schema.org",

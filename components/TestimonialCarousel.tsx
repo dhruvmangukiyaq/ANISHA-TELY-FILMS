@@ -64,8 +64,12 @@ export default function TestimonialCarousel({
         </footer>
       </div>
 
-      <div className="mt-10 flex items-center gap-5">
-        <div className="flex gap-2" role="tablist" aria-label="Testimonials">
+      <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-4">
+        <div
+          className="flex flex-wrap gap-2"
+          role="tablist"
+          aria-label="Testimonials"
+        >
           {items.map((item, dotIndex) => (
             <button
               key={item.couple}

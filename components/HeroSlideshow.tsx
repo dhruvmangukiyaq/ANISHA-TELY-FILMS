@@ -41,7 +41,7 @@ export default function HeroSlideshow() {
     <section
       aria-roledescription="carousel"
       aria-label="Recent wedding photography"
-      className="relative isolate flex h-[100svh] min-h-[640px] flex-col justify-end overflow-hidden"
+      className="relative isolate flex min-h-[max(640px,100svh)] flex-col justify-end overflow-hidden"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
@@ -96,28 +96,28 @@ export default function HeroSlideshow() {
         </div>
       </div>
 
-      <div className="container-x relative z-10 pb-14 md:pb-20">
-        <p className="eyebrow flex items-center gap-4">
-          <span aria-hidden className="h-px w-10 bg-gold/60" />
-          Wedding Photography &amp; Film · Worldwide
+      <div className="container-x relative z-10 pb-12 pt-24 sm:pb-14 sm:pt-28 md:pb-20 md:pt-32">
+        <p className="eyebrow flex flex-wrap items-center gap-2.5 sm:gap-4">
+          <span aria-hidden className="h-px w-6 bg-gold/60 sm:w-10" />
+          <span className="max-w-[90vw]">Wedding Photography &amp; Film · Worldwide</span>
         </p>
 
-        <h1 className="mt-7 max-w-5xl font-display text-[clamp(2.9rem,7.2vw,6.4rem)] font-light leading-[0.98] tracking-[-0.015em] text-ivory">
+        <h1 className="mt-6 max-w-5xl font-display text-[clamp(2.4rem,9vw,6.4rem)] font-light leading-[0.98] tracking-[-0.015em] text-ivory sm:mt-7">
           Weddings, remembered
           <br />
           <em className="italic text-gold-light">as they felt.</em>
         </h1>
 
-        <p className="mt-8 max-w-lg text-sm leading-relaxed text-ivory/65 md:text-base">
+        <p className="mt-6 max-w-lg text-sm leading-relaxed text-ivory/70 sm:mt-8 md:text-base">
           For couples who want their day documented, not directed. Quiet,
           editorial photography and film for intimate celebrations in India,
           Italy and wherever the light is good.
         </p>
 
-        <div className="mt-10 flex flex-wrap items-center gap-4">
+        <div className="mt-8 flex w-full flex-col items-start gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
           <Link
             href="/portfolio"
-            className="group inline-flex items-center gap-4 border border-gold bg-gold px-7 py-3.5 text-[10px] uppercase tracking-[0.26em] text-ink transition-colors duration-300 hover:bg-gold-light hover:border-gold-light"
+            className="group inline-flex w-full items-center justify-center gap-4 border border-gold bg-gold px-6 py-3 text-[10px] uppercase tracking-[0.26em] text-ink transition-colors duration-300 hover:bg-gold-light hover:border-gold-light sm:w-auto sm:px-7 sm:py-3.5"
           >
             View Portfolio
             <span
@@ -129,7 +129,7 @@ export default function HeroSlideshow() {
           </Link>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-4 border border-ivory/30 px-7 py-3.5 text-[10px] uppercase tracking-[0.26em] text-ivory transition-colors duration-300 hover:border-gold hover:text-gold"
+            className="inline-flex w-full items-center justify-center gap-4 border border-ivory/30 px-6 py-3 text-[10px] uppercase tracking-[0.26em] text-ivory transition-colors duration-300 hover:border-gold hover:text-gold sm:w-auto sm:px-7 sm:py-3.5"
           >
             Book Now
           </Link>

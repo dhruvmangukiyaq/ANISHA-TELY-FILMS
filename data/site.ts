@@ -9,6 +9,9 @@ export const site = {
   basedIn: "Mumbai, India",
   email: "hello@anishatelyfilms.com",
   phone: "+91 98200 41120",
+  whatsapp: "919820041120",
+  whatsappMessage:
+    "Hi Anisha — we'd like to talk about wedding photography and film for our celebration.",
   address: [
     "Studio 4, Pali Hill Road",
     "Bandra West, Mumbai 400050",
@@ -47,6 +50,14 @@ export const site = {
     "The Wedded",
   ],
 };
+
+export const whatsappHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(
+  site.whatsappMessage,
+)}`;
+
+export const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  site.address.join(", "),
+)}`;
 
 export const footerLinks = [
   {

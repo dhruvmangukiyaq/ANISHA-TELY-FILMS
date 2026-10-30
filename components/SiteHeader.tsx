@@ -95,7 +95,7 @@ export default function SiteHeader() {
           <div className="flex items-center gap-3">
             <Link
               href="/contact"
-              className="hidden whitespace-nowrap border border-gold/50 px-5 py-3 text-[10px] uppercase tracking-[0.22em] text-gold transition-colors duration-300 hover:bg-gold hover:text-ink sm:inline-flex"
+              className="hidden whitespace-nowrap border border-gold/50 px-4 py-2 text-[9px] uppercase tracking-[0.22em] text-gold transition-colors duration-300 hover:bg-gold hover:text-ink sm:inline-flex sm:px-5 sm:py-3 sm:text-[10px]"
             >
               Book Now
             </Link>

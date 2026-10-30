@@ -7,12 +7,21 @@ import Reveal from "@/components/Reveal";
 import SectionLabel from "@/components/SectionLabel";
 import { services } from "@/data/services";
 import { site } from "@/data/site";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Services",
   description:
     "Wedding photography, wedding films, and multi-day destination coverage. Quiet, editorial work made for celebrations that feel like you.",
-};
+  path: "/services",
+  image: "/images/galleries/val-dorcia/cover.jpg",
+  imageAlt: "Wedding photography and film collections",
+  keywords: [
+    "wedding photography packages",
+    "wedding film",
+    "destination wedding coverage",
+  ],
+});
 
 export default function ServicesPage() {
   return (

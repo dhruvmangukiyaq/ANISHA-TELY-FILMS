@@ -10,6 +10,11 @@ import {
 import { site, whatsappHref } from "@/data/site";
 import { WhatsAppIcon } from "./WhatsAppButton";
 
+const apiBase = (process.env.NEXT_PUBLIC_API_BASE_URL ?? "").replace(
+  /\/+$/,
+  "",
+);
+
 type FieldName = "name" | "phone" | "email" | "date" | "message";
 type Values = Record<FieldName, string>;
 type Errors = Partial<Record<FieldName, string>>;
@@ -126,6 +131,9 @@ export default function InquiryForm() {
   const [touched, setTouched] = useState<Partial<Record<FieldName, boolean>>>({});
   const [attempted, setAttempted] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [trap, setTrap] = useState("");
   const successRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -148,7 +156,7 @@ export default function InquiryForm() {
     setErrors((current) => ({ ...current, [field]: nextErrors[field] }));
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const nextErrors = validate(values);
@@ -161,6 +169,7 @@ export default function InquiryForm() {
       message: true,
     });
     setErrors(nextErrors);
+    setFormError("");
 
     const firstInvalid = fieldOrder.find((field) => nextErrors[field]);
     if (firstInvalid) {
@@ -168,7 +177,60 @@ export default function InquiryForm() {
       return;
     }
 
-    setSubmitted(true);
+    setSubmitting(true);
+
+    try {
+      const response = await fetch(`${apiBase}/api/enquiries`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: values.name.trim(),
+          phone: values.phone.trim(),
+          email: values.email.trim(),
+          event_date: values.date,
+          message: values.message.trim(),
+          company_website: trap,
+        }),
+      });
+
+      if (response.status === 422) {
+        const payload = (await response.json().catch(() => null)) as {
+          error?: { message?: string; errors?: Record<string, string> };
+        } | null;
+        const serverErrors = payload?.error?.errors ?? {};
+        setErrors((current) => ({
+          ...current,
+          name: serverErrors.name,
+          phone: serverErrors.phone,
+          email: serverErrors.email,
+          date: serverErrors.event_date,
+          message: serverErrors.message,
+        }));
+        setFormError(
+          payload?.error?.message ?? "Please check the highlighted fields.",
+        );
+        return;
+      }
+
+      if (!response.ok) {
+        const payload = (await response.json().catch(() => null)) as {
+          error?: { message?: string };
+        } | null;
+        setFormError(
+          payload?.error?.message ??
+            `The inbox replied with status ${response.status}. Please try again.`,
+        );
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setFormError(
+        "We could not reach the studio inbox. Please try again, or message directly on WhatsApp.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   function reset() {
@@ -177,6 +239,8 @@ export default function InquiryForm() {
     setTouched({});
     setAttempted(false);
     setSubmitted(false);
+    setFormError("");
+    setTrap("");
   }
 
   const errorCount = fieldOrder.filter((field) => errors[field]).length;
@@ -196,9 +260,9 @@ export default function InquiryForm() {
         </h3>
         <p className="mt-5 max-w-md text-sm leading-[1.9] text-muted">
           Your note for{" "}
-          <span className="text-ivory/90">{formatDate(values.date)}</span> has
-          been saved to this demo. On the live site it would land in the studio
-          inbox, and Anisha would reply personally within two working days.
+          <span className="text-ivory/90">{formatDate(values.date)}</span> is in
+          the studio inbox. Anisha reads each enquiry herself and replies
+          personally within two working days.
         </p>
 
         <dl className="mt-8 grid gap-x-8 gap-y-5 border-t border-line/60 pt-6 sm:grid-cols-2">
@@ -217,10 +281,6 @@ export default function InquiryForm() {
             <dd className="mt-1.5 text-sm text-ivory/85">{values.phone}</dd>
           </div>
         </dl>
-
-        <p className="mt-6 text-[10px] uppercase tracking-[0.24em] text-muted-2">
-          Demo form · nothing was sent anywhere
-        </p>
 
         <div className="mt-9 flex flex-wrap items-center gap-5">
           <button
@@ -252,15 +312,27 @@ export default function InquiryForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-8">
-      {attempted && errorCount > 0 && (
+      {(formError || (attempted && errorCount > 0)) && (
         <div
           role="alert"
           className="border-l-2 border-danger/70 bg-danger/[0.06] px-5 py-4 text-sm leading-relaxed text-danger"
         >
-          Please check the {errorCount === 1 ? "highlighted field" : `${errorCount} highlighted fields`}{" "}
-          below.
+          {formError ||
+            `Please check the ${errorCount === 1 ? "highlighted field" : `${errorCount} highlighted fields`} below.`}
         </div>
       )}
+
+      <div className="hidden" aria-hidden="true">
+        <label htmlFor="company_website">Company website</label>
+        <input
+          id="company_website"
+          name="company_website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={trap}
+          onChange={(event) => setTrap(event.target.value)}
+        />
+      </div>
 
       <div className="grid gap-8 sm:grid-cols-2">
         <FieldShell id="name" label="Your name *" error={errors.name}>
@@ -374,9 +446,10 @@ export default function InquiryForm() {
       <div className="flex flex-col gap-5 border-t border-line/60 pt-8 sm:flex-row sm:items-center sm:justify-between">
         <button
           type="submit"
-          className="group inline-flex items-center justify-center gap-4 border border-gold bg-gold px-8 py-4 text-[10px] uppercase tracking-[0.28em] text-ink transition-colors duration-300 hover:border-gold-light hover:bg-gold-light"
+          disabled={submitting}
+          className="group inline-flex items-center justify-center gap-4 border border-gold bg-gold px-8 py-4 text-[10px] uppercase tracking-[0.28em] text-ink transition-colors duration-300 hover:border-gold-light hover:bg-gold-light disabled:cursor-wait disabled:opacity-60"
         >
-          Send enquiry
+          {submitting ? "Sending…" : "Send enquiry"}
           <span
             aria-hidden
             className="transition-transform duration-500 group-hover:translate-x-1"
@@ -385,7 +458,7 @@ export default function InquiryForm() {
           </span>
         </button>
         <p className="text-[10px] uppercase tracking-[0.2em] text-muted-2">
-          * Required · demo form, no data is sent
+          * Required
         </p>
       </div>
 

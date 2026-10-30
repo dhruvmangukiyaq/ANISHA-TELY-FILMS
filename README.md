@@ -1,12 +1,14 @@
 # Anisha Tely Films
 
-A dark, editorial portfolio site for a wedding photographer and filmmaker. Built with the Next.js App Router, TypeScript, Tailwind CSS v4, and Framer Motion. Every piece of content is local mock data — there is no backend, database, or CMS.
+A dark, editorial portfolio site for a wedding photographer and filmmaker. Built with the Next.js App Router, TypeScript, Tailwind CSS v4, and Framer Motion, with an Express + SQLite backend that stores real wedding enquiries. Gallery, portfolio and review content is still local mock data — there is no CMS.
 
 ## Getting started
 
 ```bash
 npm install
-npm run dev
+cp .env.example .env   # then set ADMIN_TOKEN
+npm run dev            # frontend
+npm run dev:server     # enquiry API (separate terminal)
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
@@ -14,9 +16,42 @@ Open [http://localhost:3000](http://localhost:3000).
 | Command | Description |
 | --- | --- |
 | `npm run dev` | Start the development server |
+| `npm run dev:server` | Start the Express enquiry API on `:8787`, reloading on change |
+| `npm run start:server` | Start the enquiry API without watch mode |
 | `npm run build` | Production build |
 | `npm start` | Serve the production build |
 | `npm run lint` | Run ESLint |
+
+## Enquiry API
+
+`server/` is a small Express service. The contact form posts to it directly, so
+the API needs CORS for the site origin and its own public URL on the frontend.
+
+| Route | Auth | Purpose |
+| --- | --- | --- |
+| `POST /api/enquiries` | public (rate-limited, honeypot) | Validate and store an enquiry |
+| `GET /api/enquiries` | `x-admin-token` | Inbox: `?status=new&limit=50&offset=0` |
+| `GET /api/enquiries/:id` | `x-admin-token` | One enquiry |
+| `PATCH /api/enquiries/:id` | `x-admin-token` | Set `status` to `new`, `replied` or `closed` |
+| `GET /health` | public | Liveness, whether email notify is configured |
+
+- **Storage** — SQLite at `SQLITE_PATH` (default `server/data/enquiries.db`,
+  gitignored) through Node's built-in `node:sqlite`, so there is no native
+  module to compile. Requires Node 22.5+; run `node --version` before deploying.
+- **Validation** — `server/validate.js` mirrors the browser rules and answers
+  `422` with per-field messages, so a stale or bypassed client cannot write junk.
+- **Spam** — hidden `company_website` field plus five requests per ten minutes
+  per IP (`429`). Set `TRUST_PROXY=1` when the API sits behind a host proxy,
+  otherwise every visitor shares the proxy's bucket.
+- **Email** — optional. With `MAIL_TO` and `SMTP_URL` (or `SMTP_HOST`/`PORT`/
+  `USER`/`PASS`) set, each stored enquiry also mails the studio. A mail failure
+  is logged, never returned to the couple, because the enquiry is already saved.
+
+To read the inbox without a UI:
+
+```bash
+curl -H "x-admin-token: $ADMIN_TOKEN" "$API_URL/api/enquiries?status=new"
+```
 
 ## Pages
 
@@ -42,11 +77,14 @@ Also included: `app/sitemap.ts`, `app/robots.ts`, and an SVG favicon at `app/ico
 ```
 app/                 Routes, layout, global styles, metadata, template
 components/          Header, footer, gallery cards, carousel, accordion,
-                     scroll animations (Framer Motion), and the mock enquiry form
+                     scroll animations (Framer Motion), and the enquiry form
 data/                Mock content: galleries, portfolio, reviews, videos,
                      services, FAQ, and site settings
 lib/                 Shared utilities (e.g. SEO metadata builder)
-public/images/       Locally generated placeholder photography
+server/              Express enquiry API: index.js (routes), db.js (SQLite),
+                     validate.js (server-side rules), notify.js (SMTP)
+public/images/       Photography — a mix of licensed stand-ins and generated
+                     placeholders; see Notes
 ```
 
 ### Editing content
@@ -68,8 +106,10 @@ public/images/       Locally generated placeholder photography
   swap them for real IDs before launch. Covers are matched to a gallery by
   couple name.
 - **Images** — replace files in `public/images/` keeping the same names, or
-  update the paths in the data files. The current images are abstract,
-  bokeh-style placeholders, not real photographs.
+  update the paths in the data files. Twelve hero/about/CTA/gallery covers are
+  licensed Pexels stand-ins (free for commercial use, no attribution needed);
+  the remaining gallery photos are still abstract placeholders. Swap every image
+  for Anisha's own work before launch — none of it is hers yet.
 
 ## Design system
 
@@ -90,9 +130,11 @@ Scroll reveals use Framer Motion (`Reveal`), with a subtle page fade (`app/templ
 
 ## Notes
 
-- The enquiry form is a client-side mock. It validates every field, moves focus
-  to the first invalid input, and shows a success state, but sends nothing
-  anywhere.
+- The enquiry form is live. It validates in the browser, posts to the Express
+  API, re-prints server-side field messages on `422`, and only shows the success
+  state after the API answers `201`. The frontend needs
+  `NEXT_PUBLIC_API_BASE_URL`; unset, it posts to `/api/enquiries` on the site's
+  own origin and ends in the error banner.
 - The contact map is a styled placeholder, not an embedded map. `mapsHref` in
   `data/site.ts` powers the "Open in Google Maps" link.
 - Built against Next.js 16 with Cache Components enabled. Avoid unguarded
